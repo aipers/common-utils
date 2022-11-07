@@ -10,6 +10,8 @@ import java.util.TimeZone;
 
 public abstract class Constants {
 
+  private Constants() {}
+
   public static final Locale DEFAULT_LOCALE = Locale.KOREA;
   public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
   public static final String DEFAULT_ENCODING = DEFAULT_CHARSET.toString();

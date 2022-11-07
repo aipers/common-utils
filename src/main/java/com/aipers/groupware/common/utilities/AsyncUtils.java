@@ -21,6 +21,8 @@ public abstract class AsyncUtils {
         : null;
   }
 
+  private AsyncUtils() {}
+
   /**
    * ExecutorService 이용 하여 동시 처리할 명령 집합 실행 Function 만들어 리턴 한다.
    * @param suppliers

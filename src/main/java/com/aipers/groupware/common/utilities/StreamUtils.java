@@ -15,6 +15,8 @@ import java.util.stream.StreamSupport;
 
 public abstract class StreamUtils {
 
+  private StreamUtils() {}
+
   /**
    * 주어진 객체를 Stream 으로 변환합니다
    * @param o

@@ -12,6 +12,8 @@ import javax.crypto.SecretKey;
 
 public abstract class KeyGeneratorUtils {
 
+  private KeyGeneratorUtils() {}
+
   /**
    * HMAC 암호화 해시키를 반환합니다
    * @return

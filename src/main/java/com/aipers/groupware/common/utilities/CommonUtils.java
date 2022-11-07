@@ -16,6 +16,8 @@ import javax.crypto.Cipher;
 
 public abstract class CommonUtils {
 
+  private CommonUtils() {}
+
   /**
    * 주어진 객체가 비었는지 확인합니다
    * @param obj

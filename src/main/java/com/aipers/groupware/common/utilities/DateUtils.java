@@ -14,7 +14,14 @@ import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * 8 미만의 Java 버전 에서 Date 자료의 변환, 파싱을 위한 유틸리티 클래스 입니다.
+ * Since 11 이상에서 LocalDate, LocalDateTime, ZonedDateTme 클래스를 사용하길 권장합니다.
+ */
+@Deprecated
 public abstract class DateUtils {
+
+  private DateUtils() {}
 
   /**
    * 현재시간을 주어진 포맷으로 변환하여 문자열로 반환합니다
@@ -87,8 +94,8 @@ public abstract class DateUtils {
       default: return null;
     }
 
-    final java.text.SimpleDateFormat tmpFormat =
-        new java.text.SimpleDateFormat("yyyyMMddHHmmss", java.util.Locale.KOREA);
+    final SimpleDateFormat tmpFormat =
+        new SimpleDateFormat("yyyyMMddHHmmss", java.util.Locale.KOREA);
     tmpFormat.setLenient(true);
 
     return tmpFormat.parse(date);
@@ -140,7 +147,7 @@ public abstract class DateUtils {
     if (!ymd.matches("^(\\d{4}).?(\\d{2}).?(\\d{2})$")) return false;
 
     try {
-      LocalDate.parse(ymd.replaceAll("[^\\d]", ""), DateTimeFormatter.BASIC_ISO_DATE);
+      LocalDate.parse(ymd.replaceAll("[\\D]", ""), DateTimeFormatter.BASIC_ISO_DATE);
       return true;
     } catch (DateTimeParseException e) {
       // do nothing

@@ -4,14 +4,20 @@ import com.aipers.groupware.common.Constants;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public abstract class StringUtils {
+
+  private StringUtils() {}
 
   /**
    * 주어진 문자열이 빈 문자인지 확인 합니다
@@ -68,6 +74,11 @@ public abstract class StringUtils {
     }
   }
 
+  /**
+   * 주어진 문자열의 제일 앞 하나의 문자열을 대문자로 변환하여 반환 합니다
+   * @param source
+   * @return
+   */
   public static final String firstCapitalize(final String source) {
     return Optional.ofNullable(source)
         .map(value -> value.substring(0, 1).toUpperCase().concat(value.substring(1)))
@@ -143,7 +154,7 @@ public abstract class StringUtils {
   }
 
   /**
-   * 주어진 문자열을 URL safe string 변환합니다
+   * 주어진 문자열을 URL safe 문자열로 변환합니다
    * @param text
    * @return
    */
@@ -153,6 +164,31 @@ public abstract class StringUtils {
     } catch (UnsupportedEncodingException e) {
       return null;
     }
+  }
+
+  /**
+   * 주어진 문자열에서 limit 이상의 연속된 문자열이 있는지 찾습니다. (주로 비밀번호의 유효성 검증에 사용됩니다)
+   * 연속되는지 확인하기 위해서 두자리의 문자열을 검색하기 때문에 limit 값은 최소 3 이상이 되어야 합니다
+   * @param input
+   * @param limit
+   * @return
+   */
+  public static boolean isSuccessionAtLimitMore(final String input, final int limit) {
+    if (null == input || limit > input.length()) return false;
+
+    int prev = 0, prevDiff = 0, diff = 0, count = 0;
+
+    for (int i = 0;i < input.length();i++) {
+      final char letter = input.charAt(i);
+
+      if (i > 0 && (diff = prev - letter) > -2 && (count += diff == prevDiff ? 1 : 0) > limit - 3)
+        return true;
+
+      prev = letter;
+      prevDiff = diff;
+    }
+
+    return false;
   }
 
   /**
@@ -234,11 +270,7 @@ public abstract class StringUtils {
    * @return
    */
   public final static String repeat(final String in, final int count) {
-    final StringBuilder	out	= new StringBuilder(in.length() * count);
-
-    for(int i = 0;i < count;i++) out.append(in);
-
-    return out.toString();
+    return IntStream.range(0, count).mapToObj(i -> in).collect(Collectors.joining());
   }
 
   /**
@@ -250,21 +282,9 @@ public abstract class StringUtils {
     return shuffle(in, 1);
   }
   public final static String shuffle(final String in, final int loop) {
-    final StringBuilder out = new StringBuilder(in);
-    final ArrayList<Character> chars = new ArrayList<>();
-
-    for(int i = 0;i < loop;i++) {
-      final String org = out.toString();
-
-      out.setLength(0);
-      for(final char c : org.toCharArray())
-        chars.add(c);
-
-      while(!chars.isEmpty())
-        out.append(chars.remove((int)(Math.random() * chars.size())));
-    }
-
-    return out.toString();
+    final List<String> characters = Arrays.asList(in.split("(?!^)"));
+    IntStream.range(0, loop).forEach(i -> Collections.shuffle(characters));
+    return characters.stream().collect(Collectors.joining());
   }
 
   /**

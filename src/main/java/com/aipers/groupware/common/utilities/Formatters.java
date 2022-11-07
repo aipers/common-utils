@@ -27,6 +27,8 @@ public abstract class Formatters {
           Pattern.CASE_INSENSITIVE
       );
 
+  private Formatters() {}
+
   /**
    * 주어진 문자열이 숫자형태의 문자열인지 확인 합니다
    * @param value
@@ -110,6 +112,15 @@ public abstract class Formatters {
     return StringUtils.nvl(str).trim()
         .replaceAll("\\D", "")
         .replaceAll(CARD_NO_PATTERN, "$1-$2-$3-$4");
+  }
+
+  /**
+   * 주어진 문자열에서 특정 문자열이 3회이상 반복되는지 확인 합니다. (주로 비밀번호의 유효성 검증을 위해 사용됩니다)
+   * @param value
+   * @return
+   */
+  public boolean isRepeatedAtThreeTimeMore(final String value) {
+    return REPEAT_CHAR_PATTERN.matcher(value).find();
   }
 
 }

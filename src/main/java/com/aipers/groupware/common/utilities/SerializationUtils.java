@@ -8,6 +8,8 @@ import java.io.ObjectOutputStream;
 
 public abstract class SerializationUtils {
 
+  private SerializationUtils() {}
+
   /**
    * 객체를 직렬화 합니다
    * @param data

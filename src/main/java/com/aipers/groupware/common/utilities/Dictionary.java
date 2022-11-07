@@ -23,7 +23,13 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Dictionary extends HashMap {
+/**
+ * Map 객체를 조금 편하게 사용하기 위한 유틸리티 클래스 입니다.
+ *   set 사용시 chaining 으로 사용가능
+ *   자주 사용되는 자료형으로 값을 변환 처리하기 용이함
+ *   put 메서드를 사용하여 값 주입시 키는 camel case 처리됨
+ */
+public class Dictionary extends HashMap<String, Object> {
 
   private final static long serialVersionUID = 2135268622818763181L;
 
@@ -37,7 +43,7 @@ public class Dictionary extends HashMap {
     this.putAll(o instanceof Map ? (Map) o : new ObjectMapper().convertValue(o, Map.class));
   }
 
-  public Dictionary(final Map<?,?> map) {
+  public Dictionary(final Map<String,?> map) {
     super();
     if(map != null) this.putAll(map);
   }
@@ -56,8 +62,8 @@ public class Dictionary extends HashMap {
   }
 
   @Override
-  public Object put(Object key, Object value) {
-    return super.put(StringUtils.toCamelCase((String) key), value);
+  public Object put(final String key, final Object value) {
+    return super.put(StringUtils.toCamelCase(key), value);
   }
 
   public Dictionary set(final String column, final Clob value) {
@@ -322,8 +328,10 @@ public class Dictionary extends HashMap {
 
     return new Dictionary(
         Arrays.stream(
-                (queryString.startsWith("?") ? queryString.substring(1) : queryString)
-                    .split("&")
+                (queryString.startsWith("?")
+                    ? queryString.substring(1)
+                    : queryString
+                ).split("&")
             )
             .map(v -> v.split("="))
             .collect(Collectors.toMap(v -> v[0], v -> v[1]))
@@ -381,16 +389,16 @@ public class Dictionary extends HashMap {
   }
 
   public Dictionary pick(final String ... args) {
-    final Dictionary n = new Dictionary();
+    final Dictionary newDict = new Dictionary();
 
-    Arrays.stream(args).forEach(k -> {
-      if(!isNull(k)) n.put(k, super.get(k));
-    });
+    for (final String key : args) {
+      if (!isNull(key)) newDict.put(key, super.get(key));
+    }
 
-    return n;
+    return newDict;
   }
 
-  public Dictionary omit(String ... args) {
+  public Dictionary omit(final String ... args) {
     return this.copy().delete(args);
   }
 
@@ -402,7 +410,7 @@ public class Dictionary extends HashMap {
 
   public void clearEmpty() {
     delete(
-        (String[]) this.keySet().stream()
+        this.keySet().stream()
             .filter(key -> Constants.EMPTY_STRING.equals(StringUtils.nvl(get(key))))
             .map(String::valueOf)
             .toArray(String[]::new)
@@ -415,8 +423,8 @@ public class Dictionary extends HashMap {
 
   public String toQueryString() {
     return StringUtils.replace(
-        ((Map<Object, Object>)this).entrySet().stream()
-            .map(entry -> entry.getKey() + "=" + entry.getValue())
+        this.entrySet().stream()
+            .map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue()))
             .collect(Collectors.joining("&")),
         "null", ""
     );
@@ -433,8 +441,8 @@ public class Dictionary extends HashMap {
   @Override
   public String toString() {
     return "{" +
-        ((Map<Object, Object>)this).entrySet().stream()
-            .map(entry -> "\"" + entry.getKey() + "\":\"" + entry.getValue() + "\"")
+        this.entrySet().stream()
+            .map(entry -> String.format("\"%s\":\"%s\"", entry.getKey(), entry.getValue()))
             .collect(Collectors.joining(", "))
         + "}";
   }
