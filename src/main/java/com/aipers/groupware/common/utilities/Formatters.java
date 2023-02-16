@@ -27,6 +27,8 @@ public abstract class Formatters {
           Pattern.CASE_INSENSITIVE
       );
 
+  public static final Pattern RATIONAL_NUMBER_PATTERN = Pattern.compile("^[\\-|+]?[\\d]+(\\.)?(\\d+)?$");
+
   private Formatters() {}
 
   /**
@@ -35,7 +37,7 @@ public abstract class Formatters {
    * @return
    */
   public final static boolean isValidNumber(final String value) {
-    return Pattern.compile("[\\d\\-\\.]+").matcher(value).matches();
+    return RATIONAL_NUMBER_PATTERN.matcher(value).matches();
   }
 
   /**

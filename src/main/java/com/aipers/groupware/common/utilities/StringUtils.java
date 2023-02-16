@@ -101,9 +101,7 @@ public abstract class StringUtils {
     while(matcher.find()) {
       matcher.appendReplacement(result, replacer.apply(matcher));
     }
-    matcher.appendTail(result);
-
-    return result.toString();
+    return matcher.appendTail(result).toString();
   }
 
   /**
