@@ -362,13 +362,15 @@ public class Dictionary extends HashMap<String, Object> {
   }
 
   public boolean isEmpty(final String key) {
-    return CommonUtils.isEmpty(key);
+    return CommonUtils.isEmpty(super.get(key));
   }
   public boolean anyEmpty(final String ... keys) {
-    return CommonUtils.isAnyEmpty(Arrays.asList(keys).toArray(new Object[] {}));
+    return CommonUtils.isAnyEmpty(
+        Arrays.asList(keys).stream().map(super::get).toArray(Object[]::new));
   }
   public boolean allEmpty(final String ... keys) {
-    return CommonUtils.isAllEmpty(Arrays.asList(keys).toArray(new Object[] {}));
+    return CommonUtils.isAllEmpty(
+        Arrays.asList(keys).stream().map(key -> super.get(key)).toArray(Object[]::new));
   }
 
   public boolean isList(final String key) {
