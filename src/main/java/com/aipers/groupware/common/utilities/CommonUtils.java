@@ -92,6 +92,17 @@ public abstract class CommonUtils {
   }
 
   /**
+   * 전달된 값이 비었다면 기본값을 돌려주고 값이 있다면 전달된 값을 돌려줍니다.
+   * @param obj
+   * @param def
+   * @return
+   * @param <V>
+   */
+  public static <V> V nvl(final V obj, final V def) {
+    return CommonUtils.isEmpty(obj) ? def : obj;
+  }
+
+  /**
    * 주어진 객체를 지정된 유형으로 형변환 합니다. 주어진 객체가 비어있다면 기본 값의 객체를 반환합니다
    * @param obj
    * @param def

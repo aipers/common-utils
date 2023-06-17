@@ -20,7 +20,7 @@ public abstract class Formatters {
   public static final Pattern BASE64_PATTERN = Pattern.compile(
       "^([A-Za-z0-9+/\\-_]{4})*([A-Za-z0-9+/\\-_]{3}=?|[A-Za-z0-9+/\\-_]{2}=?=?)?$");
   public static final Pattern HTTP_URL_PATTERN = Pattern.compile(
-      "^(https?):\\/\\/([^:\\/\\s]+)(:([^\\/]*))?(www\\.)?((?:[a-z0-9-]+)(\\.[a-z]{2,})?)");
+      "^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w\\.-]*)*\\/?$");
   public static final Pattern EMAIL_PATTERN =
       Pattern.compile(
           "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-z0-9-]+\\.)+[a-z]{2,6}$",
